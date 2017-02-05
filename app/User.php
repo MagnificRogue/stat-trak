@@ -26,4 +26,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Retrieve the company that this user belongs to
+     *
+     */
+    public function company() {
+      return $this->belongsTo('App\Company'); 
+    } 
 }
