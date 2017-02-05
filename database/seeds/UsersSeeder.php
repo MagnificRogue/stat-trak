@@ -20,14 +20,13 @@ class UsersSeeder extends Seeder
           return $faker->unique()->safeEmail; 
         },
         'password' => function() use($faker) {
-          return bcrypt($faker->password); 
+          return bcrypt('password'); 
         },
         'company_id' => function() {
-          return App\Company::inRandomOrder()->first()->id; 
+          return App\Company::inRandomOrder()->first()->id;
         }
       ]);
 
       $populator->seed();
-
     }
 }
