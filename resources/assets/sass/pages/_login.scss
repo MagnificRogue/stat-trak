@@ -1,0 +1,48 @@
+.login-page {
+
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: auto;
+
+    background: $brand-primary;
+
+	text-align: center;
+	color: #fff;
+
+	padding: 3em;
+
+	h1 {
+		font-weight: 300;
+		margin: 20px 0 0 0;
+		small {
+			color: rgba(255,255,255,0.7);
+		}
+	}
+
+	.form-group {
+		padding: 8px 0;
+		.form-control {
+			font-size: 16px;
+		}
+	}
+
+	.form-content {
+		padding: 40px 0;
+	}
+
+}
+.login-page-buttons {
+	.btn-white {
+		font-size: 16px;
+		background: $brand-primary;
+		box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8) inset;
+    	color: rgba(255, 255, 255, 0.8);
+	}
+	.btn-white:hover {
+		box-shadow: 0 0 0 2px #ffffff inset;
+    	color: #ffffff;
+	}
+}

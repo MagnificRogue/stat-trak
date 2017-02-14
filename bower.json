@@ -1,0 +1,36 @@
+{
+  "name": "ani-theme-laravel",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Nitin Kumar Mishra <nitin@sahusoft.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "animate.css": "3.5.2",
+    "bootstrap-btn-outline-rounded": "0.0.4",
+    "font-awesome": "4.6.3",
+    "hover": "2.0.2",
+    "jquery": "~2.1.4",
+    "perfect-scrollbar": "0.6.11",
+    "bootstrap": "4.0",
+    "c3": "0.4.11",
+    "Chart.js": "chartjs#~1.0.2",
+    "eonasdan-bootstrap-datetimepicker": "4.17.37",
+    "fullcalendar": "2.8.0",
+    "ckeditor": "4.5.9",
+    "growl": "1.3.1",
+    "tether": "1.3.2"
+  },
+  "resolutions": {
+    "jquery": "2.1.4"
+  }
+}
