@@ -12,10 +12,13 @@ class RolesSeeder extends Seeder
     public function run(EloquentPopulator\Populator $populator, Faker\Generator $faker)
     {
       
-      $populator->add(App\Role::class, 20, [
+      $populator->add(App\Role::class, 50, [
         'name' => function() use($faker) {
           return $faker->unique()->jobTitle;
-        } 
+        },
+        'company_id' => function() {
+          return App\Company::inRandomOrder()->first()->id;
+        }
       ]);
 
       $populator->execute();

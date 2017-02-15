@@ -4,19 +4,19 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Role extends Model
+class Metric extends Model
 {
   /**
    * Define which attributes of a role are fillable
    *
    * @var array
    */
-  protected $fillable = ['name'];
+  protected $fillable = ['description'];
 
   /*
    * Retrieve all users that have this role
    */ 
-  public function users() {
+  public function users () {
     return $this->belongsToMany('App\User'); 
   }
 
@@ -28,23 +28,24 @@ class Role extends Model
     return $this->belongsTo('App\Company'); 
   } 
 
-
   /**
-   * Retrive all metrics this role belongs to
+   * Retrive all roles this metric has 
    *
    */
-  public function metrics() {
-    return $this->belongsToMany('App\Metric')->withPivot('id');
+  public function roles() {
+    return $this->belongsToMany('App\Role')->withPivot('id');
   }
+
 
   /**
    * If instantiating the pivot table, instantiate our custom model instead of the default
    */
   public function newPivot(Model $parent, array $attributes, $table, $exists, $using=NULL) {
-    if ($parent instanceof Metric) {
+    if ($parent instanceof Role) {
       return new MetricRolePivot($parent, $attributes, $table, $exists, $using);
     }
     return parent::newPivot($parent, $attributes, $table, $exists, $using);
   }
+
 
 }

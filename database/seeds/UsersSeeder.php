@@ -24,6 +24,12 @@ class UsersSeeder extends Seeder
         },
         'company_id' => function() {
           return App\Company::inRandomOrder()->first()->id;
+        },
+        'created_at' => function() {
+          return date('Y-m-d H:i:s');
+        },
+        'updated_at' => function() {
+          return date('Y-m-d H:i:s');
         }
       ]);
 
