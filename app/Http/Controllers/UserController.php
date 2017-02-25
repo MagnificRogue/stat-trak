@@ -43,7 +43,7 @@ class UserController extends Controller{
     if($user->update($this->request->all())){
      return  $data["data"]["user"] = $user;
     }else{
-      return response()->json(['message' => 'Record could not be created'], 400);
+      return response()->json(['message' => 'Record could not be updated'], 400);
     } 
   }
 
