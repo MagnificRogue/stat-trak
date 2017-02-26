@@ -43,7 +43,8 @@ class ApiConvenienceController extends Controller
       
       $q = $q->firstOrFail();
       
-      return response()->json($q);
+      $data["data"][Str::singular($model)] = $q;
+      return response()->json($data);
 
     } catch(ModelNotFoundException $e) {
       return response()->json(['message' => 'Resource not found'], 404); 
