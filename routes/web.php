@@ -31,6 +31,13 @@ Route::group(["middleware" =>["jwt.auth"]],function(){
   Route::delete("/companies/{company}",'CompanyController@destroy');
   Route::put("/companies/{company}",'CompanyController@update');
 
+  //roles routes
+  Route::get("/roles/create/","RoleController@create");
+  Route::get("/roles",'RoleController@index');
+  Route::get("/roles/{role}",'RoleController@show');
+  Route::delete("/roles/{role}",'RoleController@destroy');
+  Route::put("/roles/{role}",'RoleController@update');
+
 });
 
 
