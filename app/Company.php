@@ -14,6 +14,12 @@ class Company extends Model
    */
   protected $fillable = ['name'];
 
+  /*
+   * Define what relations we want to bring in
+   *  if somebody requests a full instance of this model
+   */
+  public static $fullWith = ['users'];
+
   /**
    * Get all of the users for the company
    */

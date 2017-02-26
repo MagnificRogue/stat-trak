@@ -13,12 +13,13 @@ class Metric extends Model
    */
   protected $fillable = ['description'];
 
+
   /*
-   * Retrieve all users that have this role
-   */ 
-  public function users () {
-    return $this->belongsToMany('App\User'); 
-  }
+   * Define what relations we want to bring in
+   *  if somebody requests a full instance of this model
+   */
+  public static $fullWith = ['company','roles'];
+
 
   /**
    * Retrieve the company that this role belongs to
