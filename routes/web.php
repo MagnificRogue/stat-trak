@@ -38,6 +38,15 @@ Route::group(["middleware" =>["jwt.auth"]],function(){
   Route::delete("/roles/{role}",'RoleController@destroy');
   Route::put("/roles/{role}",'RoleController@update');
 
+  //metrics routes
+  Route::get("/metrics/create/","MetricController@create");
+  Route::get("/metrics",'MetricController@index');
+  Route::get("/metrics/{metric}",'MetricController@show');
+  Route::delete("/metrics/{metric}",'MetricController@destroy');
+  Route::put("/metrics/{metric}",'MetricController@update');
+
+
+
 });
 
 
