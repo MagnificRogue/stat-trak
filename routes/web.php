@@ -23,6 +23,14 @@ Route::group(["middleware" =>["jwt.auth"]],function(){
   Route::get("/users/{user}",'UserController@show');
   Route::delete("/users/{user}",'UserController@destroy');
   Route::put("/users/{user}",'UserController@update');
+
+  //company routes
+  Route::get("/companies/create/","CompanyController@create");
+  Route::get("/companies",'CompanyController@index');
+  Route::get("/companies/{company}",'CompanyController@show');
+  Route::delete("/companies/{company}",'CompanyController@destroy');
+  Route::put("/companies/{company}",'CompanyController@update');
+
 });
 
 

@@ -17,16 +17,19 @@ class UserController extends Controller{
   }
 
   public function index(){
-    return $data["data"]["users"] = User::all();; 
+    $data["data"]["users"] = User::all(); 
+    return response()->json($data);
   }
 
   public function show(User $user){
-    return $data["data"]["user"] = $user;
+    $data["data"]["user"] = $user;
+    return response()->json($data);
   }
 
   public function create(){
     if($user = User::create($this->request->only('name','email', 'password','company_id'))){
-      return $data["data"]["user"] = $user;
+     $data["data"]["user"] = $user;
+     return response()->json($data);
     }else{
       return response()->json(['message' => 'Record could not be created'], 400);
     } 
@@ -36,15 +39,16 @@ class UserController extends Controller{
     if(!User::destroy($id)){
       return response()->json(['message' => 'Record not found'], 404);
     } 
-    return $data["data"]["user"] = null;
+    $data["data"]["user"] = null;
+    return response()->json($data);
   }
 
   public function update(User $user){
     if($user->update($this->request->all())){
-     return  $data["data"]["user"] = $user;
+      $data["data"]["user"] = $user;
+      return response()->json($data);
     }else{
       return response()->json(['message' => 'Record could not be updated'], 400);
     } 
   }
-
 }
