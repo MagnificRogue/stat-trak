@@ -34,6 +34,7 @@ class CompanyController extends Controller{
   }
 
   public function destroy($id){
+    
     //not sure if we really want to allow a company to be destroyed
     //commenting this until we figure out what we should do
     //i am thinking just making it inactive or active 

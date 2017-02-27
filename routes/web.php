@@ -45,6 +45,14 @@ Route::group(["middleware" =>["jwt.auth"]],function(){
   Route::delete("/metrics/{metric}","MetricController@destroy");
   Route::put("/metrics/{metric}","MetricController@update");
 
+  //metrics routes
+  Route::get("/users/{user_id}/roles/{role_id}/metrics/{metric_id}/instances/create","MetricRoleInstanceController@create");
+  Route::get("/users/{user_id}/roles/{role_id}/metrics/{metric_id}/instances","MetricRoleInstanceController@index");
+  Route::get("/users/{user_id}/roles/{role_id}/metrics/{metric_id}/instances/{metric_role_instance}","MetricRoleInstanceController@show");
+  Route::delete("/users/{user_id}/roles/{role_id}/metrics/{metric_id}/instances/{metric_role_instance}","MetricRoleInstanceController@destroy");
+  Route::put("/users/{user_id}/roles/{role_id}/metrics/{metric_id}/instances/{metric_role_instance}","MetricRoleInstanceController@update");
+
+
 
   // routes to query models and bring in all of their relations
   Route::get("/full/{model}/{id}", "ApiConvenienceController@show");

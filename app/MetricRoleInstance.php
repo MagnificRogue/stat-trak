@@ -11,5 +11,5 @@ class MetricRoleInstance extends Model
    *
    * @var array
    */
-  protected $fillable = ['count'];
+  protected $fillable = ['metric_role_id','count'];
 }
