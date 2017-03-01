@@ -1,5 +1,5 @@
 <?php
-
+Route::get("/instances", "InstanceController@index");
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -51,7 +51,6 @@ Route::group(["middleware" =>["jwt.auth"]],function(){
   Route::get("/users/{user_id}/roles/{role_id}/metrics/{metric_id}/instances/{metric_role_instance}","MetricRoleInstanceController@show");
   Route::delete("/users/{user_id}/roles/{role_id}/metrics/{metric_id}/instances/{metric_role_instance}","MetricRoleInstanceController@destroy");
   Route::put("/users/{user_id}/roles/{role_id}/metrics/{metric_id}/instances/{metric_role_instance}","MetricRoleInstanceController@update");
-
 
 
   // routes to query models and bring in all of their relations
