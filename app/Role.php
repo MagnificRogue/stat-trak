@@ -14,6 +14,13 @@ class Role extends Model
   protected $fillable = ['name'];
 
   /*
+   * Define what relations we want to bring in
+   *  if somebody requests a full instance of this model
+   */
+  public static $fullWith = ['company','metrics','users'];
+
+
+  /*
    * Retrieve all users that have this role
    */ 
   public function users() {

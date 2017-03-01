@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','company_id'
     ];
 
     /**
@@ -26,6 +26,13 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /*
+     * Define what relations we want to bring in
+     *  if somebody requests a full instance of this model
+     */
+    public static $fullWith = ['company','roles'];
+
 
     /**
      * Retrieve the company that this user belongs to

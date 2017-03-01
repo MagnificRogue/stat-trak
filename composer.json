@@ -7,7 +7,8 @@
     "require": {
         "php": ">=5.6.4",
         "laravel/framework": "5.4.*",
-        "laravel/tinker": "~1.0"
+        "laravel/tinker": "~1.0",
+        "tymon/jwt-auth": "0.5.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -29,19 +30,6 @@
         }
     },
     "dependencies": {
-      "animate.css": "3.5.2",
-      "bootstrap-btn-outline-rounded": "0.0.4",
-      "font-awesome": "4.6.3",
-      "hover": "2.0.2",
-      "jquery": "~2.1.4",
-      "perfect-scrollbar": "0.6.11",
-      "bootstrap": "4.0",
-      "c3": "0.4.11",
-      "Chart.js": "chartjs#~1.0.2",
-      "eonasdan-bootstrap-datetimepicker": "4.17.37",
-      "fullcalendar": "2.8.0",
-      "ckeditor": "4.5.9",
-      "growl": "1.3.1",
       "tether": "1.3.2"
     }, 
     "scripts": {
