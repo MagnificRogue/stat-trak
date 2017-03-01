@@ -41,7 +41,11 @@ class MetricRoleInstanceTest extends TestCase{
     $metric_role_instances = json_decode($response->content(),true)["data"]["metric_role_instances"];
 
     //create a new metric 
-    $response = $this->callAuthenticated("GET","/users/1/roles/1/metrics/5/instances/create",["count"=>"5"]);
+    $ids = array();
+    $ids[] = $this->user->id;
+    $ids[] = $this->user->roles()->first()->id;
+    $ids[] = $this->user->roles()->first()->metrics()->first()->id;
+    $response = $this->callAuthenticated("GET","/users/$ids[0]/roles/$ids[1]/metrics/$ids[2]/instances/create",["count"=>"5"]);
     $this->assertTrue($response->isOk());
     $metric_role_instance = json_decode($response->content(),true)["data"]["metric_role_instance"];
     

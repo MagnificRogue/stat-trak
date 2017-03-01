@@ -27,8 +27,8 @@ class MetricRoleInstanceController extends Controller
   }
 
   public function create($user_id, $role_id, $metric_id){
-    $metric_role = \App\Role::find($role_id)->metrics()->where("metrics.id", $metric_id)->get()->first();
-    $metric_role_array = array("metric_role_id"=> $metric_role->pivot->id,"count"=>$this->request->only('count')["count"]);
+    $metric_role = \App\Role::findOrFail($role_id)->metrics()->where("metrics.id", $metric_id)->get()->first();
+    $metric_role_array = array("user_id"=>$user_id,"metric_role_id"=> $metric_role->pivot->id,"count"=>$this->request->only('count')["count"]);
     if($metric_role_instance = MetricRoleInstance::create($metric_role_array)){
       $data["data"]["metric_role_instance"] = $metric_role_instance;
       return response()->json($data);
