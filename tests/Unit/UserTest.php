@@ -13,6 +13,11 @@ class UserTest extends TestCase{
     $response->assertStatus(400);
   }
 
+  public function shouldReturn404ErrorForAUserThatDoesNotExist(){
+    $response = $this->callAuthenticated('GET', '/users/90909090999');
+    $this->assertNotEquals($response->getStatusCode(),500);
+    $this->assertTrue($response->getStatusCode(),404);
+  }
   public function testGetAllUsers(){
     //get all the users
     $response = $this->callAuthenticated('GET', '/users');
