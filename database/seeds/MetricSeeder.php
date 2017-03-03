@@ -29,13 +29,16 @@ class MetricSeeder extends Seeder
         $m = App\Metric::where('company_id', $r->company_id)->first();
         if(! $m)
           return;
-
         $r->metrics()->save($m);
-        //save a few hundred instances 
-        for($i =0; $i< 100; $i++) {
-          $r->metrics->first()->pivot->instances()->create(['count' => rand(0,50)]); 
-        }
       });
-
+      //save a few hundred instances 
+        $users = App\User::all();
+        $users->each( function($user){
+          $user->roles->each(function($role) use ($user){
+            for($i =0; $i< 100; $i++) {
+               $role->metrics->first()->pivot->instances()->create(['user_id'=>$user->id,'count' => rand(0,50)]); 
+            };  
+          }); 
+        });
     }
 }
