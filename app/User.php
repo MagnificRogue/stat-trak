@@ -19,6 +19,16 @@ class User extends Authenticatable
     ];
 
     /**
+     * The attributes that should be guarded
+     * against mass assignment
+     *
+     * @var array
+     */
+    protected $guarded = [
+      'is_admin', 'is_super_admin' 
+    ];
+
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
@@ -47,5 +57,9 @@ class User extends Authenticatable
      */
     public function roles() {
       return $this->belongsToMany('App\Role'); 
+    }
+
+    public function instances() {
+      return $this->hasMany('App\MetricRoleInstance'); 
     }
 }
