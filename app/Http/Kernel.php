@@ -53,6 +53,8 @@ class Kernel extends HttpKernel
       'auth.basic' => Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
       'guest' => App\Http\Middleware\RedirectIfAuthenticated::class,
       'jwt.auth' => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
-      'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class
+      'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
+      'admin' => \App\Http\Middleware\UserIsAdmin::class,
+      'super_admin' => \App\Http\Middleware\UserIsSuperAdmin::class,
     ];
 }
