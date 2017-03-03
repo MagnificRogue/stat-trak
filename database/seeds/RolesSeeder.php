@@ -11,8 +11,9 @@ class RolesSeeder extends Seeder
      */
     public function run(EloquentPopulator\Populator $populator, Faker\Generator $faker)
     {
-      
-      $populator->add(App\Role::class, 50, [
+
+
+      $populator->add(App\Role::class, 100 , [
         'name' => function() use($faker) {
           return $faker->unique()->jobTitle;
         },
@@ -24,13 +25,15 @@ class RolesSeeder extends Seeder
       $populator->execute();
       
 
+      $companies = App\Company::all();
 
-      // Lets attach some users to some roles
-      $users = App\User::all();
-      $roles = App\Role::all();
-      $users->each( function($user) use ($roles) {
-        $user->roles()->sync($roles->random(rand(1,5))->pluck('id')->toArray());
-     });
+      $companies->each(function($c){
+        $u = App\User::where('company_id', $c->id)->get();
+        $r = App\Role::where('company_id', $c->id)->get(); 
+        $u->each( function($user) use ($r) {
+          $user->roles()->sync($r->random(1)->pluck('id')->toArray());
+        });
+      });
 
     }
 

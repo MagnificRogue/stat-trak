@@ -32,13 +32,15 @@ class MetricSeeder extends Seeder
         $r->metrics()->save($m);
       });
       //save a few hundred instances 
-        $users = App\User::all();
-        $users->each( function($user){
-          $user->roles->each(function($role) use ($user){
-            for($i =0; $i< 100; $i++) {
-               $role->metrics->first()->pivot->instances()->create(['user_id'=>$user->id,'count' => rand(0,50)]); 
-            };  
-          }); 
-        });
-    }
+
+
+      $metric_roles = DB::table('metric_role')->get();
+
+      $metric_roles->each(function($m){
+        for($i=0; $i<100; $i++){
+          $instance = new \App\MetricRoleInstance(['metric_role_id' => $m->id, 'count' => rand(1,50)]);
+          $instance->save(); 
+        } 
+      });
+  }
 }

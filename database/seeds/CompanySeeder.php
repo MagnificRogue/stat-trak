@@ -14,7 +14,7 @@ class CompanySeeder extends Seeder
       $populator->add(App\Company::class, 20, [
         'name' => function() use($faker) {
           return $faker->unique()->company; 
-        } 
+        }
       ]);
 
       $populator->execute();
