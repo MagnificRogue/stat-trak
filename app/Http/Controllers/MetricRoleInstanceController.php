@@ -46,6 +46,9 @@ class MetricRoleInstanceController extends Controller
   }
 
   public function update($user_id, $role_id, $metric_id, MetricRoleInstance $metric_role_instance){
+    //I am thinking that validating the relationships here is pointless
+    //the reason being that we are looking the instance up by its id, meaning it was already created
+    //and since it is validated on creation there is no need to do it here.
     if($metric_role_instance->update($this->request->all())){
       $data["data"]["metric_role_instance"] = $metric_role_instance;
       return response()->json($data);
