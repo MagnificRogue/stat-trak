@@ -40,7 +40,7 @@ class MetricRoleInstanceTest extends TestCase{
     $this->assertTrue($response->isOk());
     $metric_role_instances = json_decode($response->content(),true)["data"]["metric_role_instances"];
 
-    //create a new metric 
+    //create a new instance
     $ids = array();
     $ids[] = $this->user->id;
     $ids[] = $this->user->roles()->first()->id;
@@ -49,9 +49,27 @@ class MetricRoleInstanceTest extends TestCase{
     $this->assertTrue($response->isOk());
     $metric_role_instance = json_decode($response->content(),true)["data"]["metric_role_instance"];
     
-    //make sure the metric is new metric 
+    //make sure the metric is new instance 
     $this->assertEquals($metric_role_instance["count"],"5");
     $this->assertCount(sizeOf($metric_role_instances)+1,\App\MetricRoleInstance::all());
+  }
+
+  public function testShouldNotCreateMetricRoleInstance(){
+    //get all the metric role instances 
+    $response = $this->callAuthenticated('GET', '/users/1/roles/3/metrics/6/instances');
+    $this->assertTrue($response->isOk());
+    $metric_role_instances = json_decode($response->content(),true)["data"]["metric_role_instances"];
+
+    //create a new instance
+    $ids = array();
+    $ids[] = $this->user->id;
+    $ids[] = $this->user->roles()->first()->id;
+    $ids[] = 9999;
+    $response = $this->callAuthenticated("GET","/users/$ids[0]/roles/$ids[1]/metrics/$ids[2]/instances/create",["count"=>"5"]);
+    $this->assertEquals($response->getStatusCode(),400);
+    
+    //make sure the metric did not get added 
+    $this->assertCount(sizeOf($metric_role_instances),\App\MetricRoleInstance::all());
   }
 
   public function testUpdateMetricRoleInstance(){
