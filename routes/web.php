@@ -57,7 +57,4 @@ Route::group(["middleware" =>["jwt.auth"]],function(){
   // routes to query models and bring in all of their relations
   Route::get("/full/{model}/{id}", "ApiConvenienceController@show");
   
-  });
- });
-
-
+});
