@@ -30,6 +30,9 @@ class UsersSeeder extends Seeder
         },
         'updated_at' => function() {
           return date('Y-m-d H:i:s');
+        },
+        'permission' => function() {
+          return "standard"; 
         }
       ]);
 
