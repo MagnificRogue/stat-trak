@@ -27,7 +27,7 @@ class UserController extends Controller{
   }
 
   public function create(){
-    if($user = User::create($this->request->only('name','email', 'password','company_id'))){
+    if($user = User::create($this->request->only('name','email', 'password','company_id','permission'))){
      $data["data"]["user"] = $user;
      return response()->json($data);
     }else{
