@@ -33,6 +33,21 @@ class User extends Authenticatable
      */
     public static $fullWith = ['company','roles'];
 
+    
+    /*
+     * Define the "levels" that a users permission maps to.
+     *  Out of the box, laravel doesn't give us a native
+     *  way of accessing an enum's possible value
+     *  in the database, so here we're just going to have
+     *  a mapping between the permissions and a value
+     */
+    public static $permissions = [
+      'guest' => 0,
+      'standard' => 1,
+      'admin' => 2,
+      'super_admin' => 3 
+    ];
+
 
     /**
      * Retrieve the company that this user belongs to
