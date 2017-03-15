@@ -45,7 +45,7 @@ class UserTest extends TestCase{
     $users = json_decode($response->content(),true)["data"]["users"];
 
     //create a new user 
-    $response = $this->callAuthenticated('GET', '/users/create',["name"=>"Brian Ludwig, JR","password"=>"Harper86","email"=>"faker@poop.com"]);
+    $response = $this->callAuthenticated('GET', '/users/create',["name"=>"Brian Ludwig, JR","password"=>"Harper86","email"=>"faker@poop.com", "permission" => "standard"]);
     $this->assertTrue($response->isOk());
     $user =  json_decode($response->content(),true)["data"]["user"];
     
