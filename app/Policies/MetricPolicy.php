@@ -17,7 +17,7 @@ class MetricPolicy extends ModelPolicy
      */
     public function view(User $user, Metric $metric)
     {
-        //
+      return $user->company_id === $metric->company_id;
     }
 
     /**
@@ -28,7 +28,7 @@ class MetricPolicy extends ModelPolicy
      */
     public function create(User $user)
     {
-        //
+      return $user->isAdmin();
     }
 
     /**
@@ -40,7 +40,7 @@ class MetricPolicy extends ModelPolicy
      */
     public function update(User $user, Metric $metric)
     {
-        //
+      return $user->isAdmin() && $user->company_id === $metric->company_id;
     }
 
     /**
@@ -52,6 +52,6 @@ class MetricPolicy extends ModelPolicy
      */
     public function delete(User $user, Metric $metric)
     {
-        //
+      return $user->isAdmin() && $user->company_id === $metric->company_id;
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\User;
-use App\User;
 
 class UserPolicy extends ModelPolicy
 {
@@ -17,7 +16,7 @@ class UserPolicy extends ModelPolicy
      */
     public function view(User $viewer, User $user)
     {
-        //
+      return $viewer->company_id === $user->company_id;
     }
 
     /**
@@ -26,9 +25,9 @@ class UserPolicy extends ModelPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $creator)
     {
-        //
+      return $creator->isAdmin();
     }
 
     /**
@@ -40,7 +39,7 @@ class UserPolicy extends ModelPolicy
      */
     public function update(User $updater, User $user)
     {
-        //
+      return $updater->isAdmin() && $user->compnay_id === $updater->company_id;
     }
 
     /**
@@ -52,6 +51,6 @@ class UserPolicy extends ModelPolicy
      */
     public function delete(User $deleter, User $user)
     {
-        //
+      return $updater->isAdmin() && $user->compnay_id === $updater->company_id;    
     }
 }

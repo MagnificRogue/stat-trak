@@ -16,7 +16,7 @@ class CompanyPolicy extends ModelPolicy
      */
     public function view(User $user, Company $company)
     {
-        //
+      return $user->company_id === $company->id;
     }
 
     /**
@@ -27,7 +27,7 @@ class CompanyPolicy extends ModelPolicy
      */
     public function create(User $user)
     {
-        //
+      return false; // super admin capability registered in the ModelPolicy class will catch the request before it gets here
     }
 
     /**
@@ -39,7 +39,7 @@ class CompanyPolicy extends ModelPolicy
      */
     public function update(User $user, Company $company)
     {
-        //
+      return $user->isAdmin() && $user->company_id === $company->id;
     }
 
     /**
@@ -51,6 +51,6 @@ class CompanyPolicy extends ModelPolicy
      */
     public function delete(User $user, Company $company)
     {
-        //
+      return false; // super admin capability registered in the ModelPolicy class wil lcatch the request before it gets here
     }
 }
