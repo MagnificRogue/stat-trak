@@ -11,4 +11,9 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class Controller extends BaseController{
 
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+
+    protected function returnUnauthorized() {
+      return response()->json(['error' => 'Forbidden'], 403); 
+    }
 }
