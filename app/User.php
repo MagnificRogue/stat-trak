@@ -63,4 +63,8 @@ class User extends Authenticatable
     public function roles() {
       return $this->belongsToMany('App\Role'); 
     }
+
+    public function isSuperAdmin() {
+      return $this->permission === 'super_admin'; 
+    }
 }
