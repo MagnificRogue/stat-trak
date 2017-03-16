@@ -17,7 +17,16 @@ class MetricRoleInstancePolicy extends ModelPolicy
      */
     public function view(User $user, MetricRoleInstance $metricRoleInstance)
     {
-        //
+      $sameUser = $user->id === $metricRoleInstance->user_id;
+
+      $u = User::where('id', $metricRoleInstance->user_id)->first();
+      if(!$u) {
+        return false; 
+      }
+
+      $isAdminOfSameCompany = $user->isAdmin() && $user->company_id === $u->company_id;
+      
+      return $sameUser || $isAdminOfSameCompany;
     }
 
     /**
@@ -28,7 +37,7 @@ class MetricRoleInstancePolicy extends ModelPolicy
      */
     public function create(User $user)
     {
-        //
+      return true; 
     }
 
     /**
@@ -40,7 +49,13 @@ class MetricRoleInstancePolicy extends ModelPolicy
      */
     public function update(User $user, MetricRoleInstance $metricRoleInstance)
     {
-        //
+      $u = User::where('id', $metricRoleInstance->user_id)->first();
+      if(!$u) {
+        return false; 
+      }
+      $isAdminOfSameCompany = $user->isAdmin() && $user->company_id === $u->company_id;
+      
+      return $isAdminOfSameCompany;
     }
 
     /**
@@ -52,6 +67,12 @@ class MetricRoleInstancePolicy extends ModelPolicy
      */
     public function delete(User $user, MetricRoleInstance $metricRoleInstance)
     {
-        //
+      $u = User::where('id', $metricRoleInstance->user_id)->first();
+      if(!$u) {
+        return false; 
+      }
+      $isAdminOfSameCompany = $user->isAdmin() && $user->company_id === $u->company_id;
+      
+      return $isAdminOfSameCompany;
     }
 }
