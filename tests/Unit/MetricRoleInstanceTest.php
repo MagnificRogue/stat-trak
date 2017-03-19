@@ -28,7 +28,6 @@ class MetricRoleInstanceTest extends TestCase{
 
     $response =  $this->authenticate($u->email);
     $this->assertTrue($response->isOk());
-    $this->validUri = '/users/'.$u->id.'/roles/'.$this->testRole->id.'/metrics/'.$this->testMetric->id.'/instances';
   }
 
 
@@ -63,7 +62,7 @@ class MetricRoleInstanceTest extends TestCase{
 
     $instances = \App\MetricRoleInstance::all();
     //create a new instance
-    $response = $this->callAuthenticated("GET",'/instances/create',["count"=>"5",'user' => '13', 'role' => '1', 'metric' => '1']);
+    $response = $this->callAuthenticated("GET",'/instances/create',["count"=>"5",'user' => $this->testUser->id, 'role' => $this->testRole->id, 'metric' => $this->testMetric->id]);
     $this->assertTrue($response->isOk());
 
 
@@ -82,7 +81,7 @@ class MetricRoleInstanceTest extends TestCase{
 
     //create a new instance
     $ids = array();
-    $response = $this->callAuthenticated("GET",'/instances/create',["count"=>"5",'user' => '1', 'role' => '1', 'metric' => 100000]);
+    $response = $this->callAuthenticated("GET",'/instances/create',["count"=>"5",'user' => $this->testUser->id, 'role' => $this->testRole->id, 'metric' => 100000]);
     $this->assertEquals($response->getStatusCode(),404);
     
     //make sure the metric did not get added 

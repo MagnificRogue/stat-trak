@@ -11,6 +11,13 @@
 |
 */
 
+$factory->define(App\Company::class, function (Faker\Generator $faker) {
+
+    return [
+        'name' => $faker->unique()->company,
+    ];
+});
+
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     static $password;
