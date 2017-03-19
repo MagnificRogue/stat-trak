@@ -39,7 +39,6 @@ class MetricRoleInstanceTest extends TestCase{
     $instances = \App\MetricRoleInstance::all();
     //create a new instance
     $response = $this->callAuthenticated("GET",'/instances/create',["count"=>"5",'user' => '13', 'role' => '1', 'metric' => '1']);
-    //print_r($response);
     $this->assertTrue($response->isOk());
 
 
