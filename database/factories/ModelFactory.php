@@ -36,8 +36,6 @@ $factory->define(App\Metric::class, function (Faker\Generator $faker) {
         'description' => $faker->name,
     ];
 });
-<<<<<<< Updated upstream
-=======
 
 //Define how to create a factory for a Role
 $factory->define(App\Role::class, function (Faker\Generator $faker){
@@ -46,9 +44,6 @@ $factory->define(App\Role::class, function (Faker\Generator $faker){
     //'company_id' => factory(App\Company::class)->create()->id
   ];
 });
-
-
-
 
 
 //Define how to create a factory for a MetricRoleInstance
@@ -60,7 +55,6 @@ $factory->define(App\MetricRoleInstance::class, function(Faker\Generator $faker)
   
   if (!$metricRoles){
     $metricRoles = \DB::table('metric_role')->select('id as metric_role_id','role_id')->get();
-    $factory->metricRoles = $metricRoles;
   }
   
   $tuple = $metricRoles->random(1)->first(); 
@@ -71,4 +65,3 @@ $factory->define(App\MetricRoleInstance::class, function(Faker\Generator $faker)
     'count' => rand(1,50)
   ];
 });
->>>>>>> Stashed changes

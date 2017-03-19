@@ -44,9 +44,7 @@ class MetricRoleInstanceTest extends TestCase{
     $metric_role_instances = json_decode($response->content(),true)["data"]["metric_role_instances"];
     //make sure all the metric role instances are there
 
-    $this->assertCount(sizeOf($metric_role_instances),\App\MetricRoleInstance::where('user_id', $this->testUser->id)
-      ->where('metric_role_id', $this->testMetricRoleId)
-      ->get());
+    $this->assertCount(sizeOf($metric_role_instances),\App\MetricRoleInstance::all());  
   }
 
   public function testGetSpecificMetricRoleInstance(){
@@ -95,14 +93,12 @@ class MetricRoleInstanceTest extends TestCase{
     
     //get the last metric (should be the metric created in the test above)
     $metric_role_instance_to_update = \App\MetricRoleInstance::all()->last();     
-    $this->assertEquals($metric_role_instance_to_update->count,"5");
-    
-    //create a new metric 
+
     $response = $this->callAuthenticated("PUT","/instances/".$metric_role_instance_to_update->id,["count"=>"69"]);
     $this->assertTrue($response->isOk());
 
     $metric_role_instance = json_decode($response->content(),true)["data"]["metric_role_instance"];
-    $this->assertNotEquals($metric_role_instance["count"],"5");
+    $this->assertNotEquals($metric_role_instance["count"],$metric_role_instance_to_update->count);
     $this->assertEquals($metric_role_instance["count"],"69");
   }
 
