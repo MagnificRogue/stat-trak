@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class MetricRoleInstanceTest extends TestCase{
-// /user/{user_id}/role/{role_id}/metric/{metric_id}/instances/create
+
   public function testReturnUnauthrized(){
     $response = $this->call('GET', '/instances');
     $response->assertStatus(400);
@@ -39,6 +39,7 @@ class MetricRoleInstanceTest extends TestCase{
     $instances = \App\MetricRoleInstance::all();
     //create a new instance
     $response = $this->callAuthenticated("GET",'/instances/create',["count"=>"5",'user' => '13', 'role' => '1', 'metric' => '1']);
+    //print_r($response);
     $this->assertTrue($response->isOk());
 
 

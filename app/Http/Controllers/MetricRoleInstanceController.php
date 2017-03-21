@@ -46,23 +46,57 @@ class MetricRoleInstanceController extends Controller{
   public function create(){
     $request = $this->request;
 
-    if(!$request->user || !$request->metric || !$request->role || !$request->count){
-       return response()->json(['message' => 'A metric, a role, a user, and a count are required to create an instance of the assocation'], 400);
-    }
+    
+    $q = MetricRoleInstance::query(); 
 
-    $user = \App\User::where('id', $request->user)->first();
-    $role = \App\Role::where('id', $request->role)->first();
-    $metric = \App\Metric::where('id', $request->metric)->first();
-
-    if(!$user || !$role || !$metric) {
-      return response()->json(['message' => 'A valid metric, a valid role, and a valid user are required to create an instance of the assocation'], 404);
+    if(!$request->user) {
+      return response()->json(['message' => 'A user is required to create an instance of the assocation'], 400);
     }
     
-    $validUserToRole = $user->roles->contains($role->id);
-    $validRoleToMetric = $role->metrics->contains($metric->id);
+    if(!$request->metric) {
+      return response()->json(['message' => 'A metric is required to create an instance of the assocation'], 400);
+    }
+     
+    if(!$request->role) {
+      return response()->json(['message' => 'A role is required to create an instance of the assocation'], 400);
+    }
+      
+    if(!$request->count) {
+      return response()->json(['message' => 'A count are required to create an instance of the assocation'], 400);
+    }
 
-    if(!$validUserToRole || !$validRoleToMetric){
-      return response()->json(['message' => 'The user either did not have the correct role or the role not the correct metric.
+
+     //for the record i prefer the straight sql method with only one request
+    //that was already implemented, however this does provide better error messaging
+    //to the client
+    //this is a write so it is fine, for now, BUT all reads this 
+    //complicated should be in SQL
+    // B.L.
+
+    $user = \App\User::where('id', $request->user)->first();
+    if(!$user){
+      return response()->json(['message' => 'A valid user is required to create an instance of the assocation'], 404);
+    }
+
+    $role = \App\Role::where('id', $request->role)->first();
+    if(!$role){
+      return response()->json(['message' => 'A valid role is required to create an instance of the assocation'], 404);
+    }
+
+    $metric = \App\Metric::where('id', $request->metric)->first();
+    if(!$metric) {
+      return response()->json(['message' => 'A valid metric is required to create an instance of the assocation'], 404);
+    }
+
+    $validUserToRole = $user->roles->contains($role->id);
+    if(!$validUserToRole){
+      return response()->json(['message' => 'The user  did not have the correct role .
+                                Associations where not valid.'], 400);
+    }
+
+    $validRoleToMetric = $role->metrics->contains($metric->id);
+    if( !$validRoleToMetric){
+      return response()->json(['message' => 'The role did not the correct metric.
                                 Associations where not valid.'], 400);
     }
 
@@ -72,6 +106,7 @@ class MetricRoleInstanceController extends Controller{
     if(!$instance){
       return response()->json(['message' => 'Record could not be created'], 400);
     }
+
     $data["data"]["metric_role_instance"] = $instance;
     return response()->json($data);
   } 
