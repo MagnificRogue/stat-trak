@@ -20,11 +20,19 @@ class CompanyController extends Controller{
   }
 
   public function show(Company $company ){
+    if(!$this->request->user()->can('view', $company)) {
+      $this->returnUnauthorized(); 
+    }
+
     $data["data"]["company"] = $company;
     return response()->json($data);
   }
 
   public function create(){
+    if(!$this->request->user()->can('create', Company::class)) {
+      $this->returnUnauthorized(); 
+    }
+
     if($company = Company::create($this->request->only('name'))){
      $data["data"]["company"] = $company;
      return response()->json($data);
@@ -33,8 +41,11 @@ class CompanyController extends Controller{
     } 
   }
 
-  public function destroy($id){
-    
+  public function destroy(Company $company){
+     if(!$this->request->user()->can('delete', $company)) {
+      $this->returnUnauthorized(); 
+    }
+   
     //not sure if we really want to allow a company to be destroyed
     //commenting this until we figure out what we should do
     //i am thinking just making it inactive or active 
@@ -45,6 +56,10 @@ class CompanyController extends Controller{
   }
 
   public function update(Company $company){
+    if(!$this->request->user()->can('delete', $company)) {
+      $this->returnUnauthorized(); 
+    }
+
     if($company->update($this->request->all())){
      $data["data"]["company"] = $company;
      return response()->json($data);

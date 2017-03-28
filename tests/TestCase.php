@@ -12,25 +12,26 @@ abstract class TestCase extends BaseTestCase{
 
     protected function setup(){
       parent::setUp();
-      //make the authenticated user
-      $response = $this->createAuthenticatedUser();
+      $response =  $this->authenticate(\App\User::first()->email);
       $this->assertTrue($response->isOk());
-    }
-
-    protected function createAuthenticatedUser(){
-      $this->user = \App\User::first();
-      $response = $this->call('POST', "/users/sign_in",["email"=> $this->user->email,"password"=> "password"]);
-      $this->token = $response->headers->get("JWT");
-      return $response;
     }
 
     protected function callAuthenticated($method, $uri, array $data = [], array $headers = []){
 
       if ($this->token && !isset($headers['Authorization'])) {
-        $headers['Authorization'] = "Bearer: $this->token";
+        $headers['Authorization'] = $this->token;
       }
       $server = $this->transformHeadersToServerVars($headers);
       $response = $this->call(strtoupper($method), $uri, $data, [], [], $server);
       return $response;
     }
+
+    protected function authenticate($email) {
+      $this->user = \App\User::where('email',$email)->first();
+      $response = $this->call('POST', '/users/sign_in', ['email' => $this->user->email, 'password' => 'password']); 
+      $this->assertTrue($response->isOk());
+      $this->token = $response->headers->get('Authorization');
+      return $response;
+    }
+
 }

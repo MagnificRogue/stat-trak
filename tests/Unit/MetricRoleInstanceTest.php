@@ -7,24 +7,48 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class MetricRoleInstanceTest extends TestCase{
-// /user/{user_id}/role/{role_id}/metric/{metric_id}/instances/create
+
+  public $testUser, $testRole, $testMetric, $testMetricRoleId, $validUri;
+
+  protected function setup(){
+    parent::setUp();
+    $u = \App\User::with('roles')->first(); 
+    $this->testUser = $u;
+    $this->testRole = $u->roles->first();
+    $this->testMetric = $this->testRole->metrics->first();
+
+    $this->testMetricRoleId = $this->testRole->metrics()->first()->pivot->id;
+    
+    //Save a few just in case  they don't exist
+    factory(\App\MetricRoleInstance::class, 25)->create([
+      'user_id' => $u->id,
+      'metric_role_id' => $this->testMetricRoleId,
+      'count' => rand(1,50) 
+    ]);
+
+    $response =  $this->authenticate($u->email);
+    $this->assertTrue($response->isOk());
+  }
+
+
   public function testReturnUnauthrized(){
-    $response = $this->call('GET', '/users/1/roles/1/metrics/1/instances');
+    $response = $this->call('GET', '/instances');
     $response->assertStatus(400);
   }
 
   public function testGetAllMetricRoleInstances(){
     //get all the metric role instances
-    $response = $this->callAuthenticated('GET','/users/1/roles/1/metrics/1/instances');
+    $response = $this->callAuthenticated('GET','/instances');
     $this->assertTrue($response->isOk());
     $metric_role_instances = json_decode($response->content(),true)["data"]["metric_role_instances"];
     //make sure all the metric role instances are there
-    $this->assertCount(sizeOf($metric_role_instances),\App\MetricRoleInstance::all());
+
+    $this->assertCount(sizeOf($metric_role_instances),\App\MetricRoleInstance::all());  
   }
 
   public function testGetSpecificMetricRoleInstance(){
     //get metric role instance  1
-    $response = $this->callAuthenticated("GET","/users/1/roles/1/metrics/1/instances/1");
+    $response = $this->callAuthenticated("GET","/instances/1");
     $this->assertTrue($response->isOk());
     $metric_role_instance = json_decode($response->content(),true)["data"]["metric_role_instance"];
     //make sure the metric role instance is who it should be 
@@ -35,71 +59,62 @@ class MetricRoleInstanceTest extends TestCase{
   }
 
   public function testCreateMetricRoleInstance(){
-    //get all the metric role instances 
-    $response = $this->callAuthenticated('GET', '/users/1/roles/3/metrics/6/instances');
-    $this->assertTrue($response->isOk());
-    $metric_role_instances = json_decode($response->content(),true)["data"]["metric_role_instances"];
 
+    $instances = \App\MetricRoleInstance::all();
     //create a new instance
-    $ids = array();
-    $ids[] = $this->user->id;
-    $ids[] = $this->user->roles()->first()->id;
-    $ids[] = $this->user->roles()->first()->metrics()->first()->id;
-    $response = $this->callAuthenticated("GET","/users/$ids[0]/roles/$ids[1]/metrics/$ids[2]/instances/create",["count"=>"5"]);
+    $response = $this->callAuthenticated("GET",'/instances/create',["count"=>"5",'user' => $this->testUser->id, 'role' => $this->testRole->id, 'metric' => $this->testMetric->id]);
     $this->assertTrue($response->isOk());
+
+
     $metric_role_instance = json_decode($response->content(),true)["data"]["metric_role_instance"];
-    
+     
     //make sure the metric is new instance 
     $this->assertEquals($metric_role_instance["count"],"5");
-    $this->assertCount(sizeOf($metric_role_instances)+1,\App\MetricRoleInstance::all());
+
+    $this->assertEquals($instances->count()+1,\App\MetricRoleInstance::all()->count());
   }
 
   public function testShouldNotCreateMetricRoleInstance(){
     //get all the metric role instances 
-    $response = $this->callAuthenticated('GET', '/users/1/roles/3/metrics/6/instances');
-    $this->assertTrue($response->isOk());
-    $metric_role_instances = json_decode($response->content(),true)["data"]["metric_role_instances"];
+    $instances = \App\MetricRoleInstance::all();
+
 
     //create a new instance
     $ids = array();
-    $ids[] = $this->user->id;
-    $ids[] = $this->user->roles()->first()->id;
-    $ids[] = 9999;
-    $response = $this->callAuthenticated("GET","/users/$ids[0]/roles/$ids[1]/metrics/$ids[2]/instances/create",["count"=>"5"]);
-    $this->assertEquals($response->getStatusCode(),400);
+    $response = $this->callAuthenticated("GET",'/instances/create',["count"=>"5",'user' => $this->testUser->id, 'role' => $this->testRole->id, 'metric' => 100000]);
+    $this->assertEquals($response->getStatusCode(),404);
     
     //make sure the metric did not get added 
-    $this->assertCount(sizeOf($metric_role_instances),\App\MetricRoleInstance::all());
+    $this->assertEquals($instances->count(),\App\MetricRoleInstance::all()->count());
   }
 
   public function testUpdateMetricRoleInstance(){
     
     //get the last metric (should be the metric created in the test above)
     $metric_role_instance_to_update = \App\MetricRoleInstance::all()->last();     
-    $this->assertEquals($metric_role_instance_to_update->count,"5");
-    
-    //create a new metric 
-    $response = $this->callAuthenticated("PUT","/users/1/roles/3/metrics/6/instances/$metric_role_instance_to_update->id",["count"=>"69"]);
+
+    $response = $this->callAuthenticated("PUT","/instances/".$metric_role_instance_to_update->id,["count"=>"69"]);
     $this->assertTrue($response->isOk());
+
     $metric_role_instance = json_decode($response->content(),true)["data"]["metric_role_instance"];
-    $this->assertNotEquals($metric_role_instance["count"],"5");
+    $this->assertNotEquals($metric_role_instance["count"],$metric_role_instance_to_update->count);
     $this->assertEquals($metric_role_instance["count"],"69");
   }
 
   public function testDeleteMetricRoleInstance(){
     //get all the metrics 
-    $response = $this->callAuthenticated("GET","/users/1/roles/3/metrics/6/instances");
+    $response = $this->callAuthenticated("GET","/instances");
     $this->assertTrue($response->isOk());
     $metric_role_instances = json_decode($response->content(),true)["data"]["metric_role_instances"];
     
     //get the last metric (should be the metric created in the test above)
-    $metric_to_delete = \App\MetricRoleInstance::all()->last();     
-    $this->assertEquals($metric_to_delete->count,"69");
+    $instances = \App\MetricRoleInstance::all();
+    $metric_to_delete = $instances->last();     
     
     //delete the metric created last metric 
-    $response = $this->callAuthenticated("DELETE","/users/1/roles/3/metrics/6/instances/$metric_to_delete->id");
+    $response = $this->callAuthenticated("DELETE","/instances/".$metric_to_delete->id);
     $this->assertTrue($response->isOk());
     
-    $this->assertCount(sizeOf($metric_role_instances)-1,\App\MetricRoleInstance::all());
+    $this->assertEquals($instances->count()-1,\App\MetricRoleInstance::all()->count());
   }
 }

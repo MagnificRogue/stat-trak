@@ -28,8 +28,8 @@ class AuthenticateController extends Controller{
     $data["user"] = User::where("email",$request->only('email'))->first();
     return response($data)
                     ->withHeaders([
-                      'JWT' => $token
-                   ]);;
+                      'Authorization'=> 'Bearer: '.$token
+                   ]);
   }  
 
   //signs out user by invalidating their token
