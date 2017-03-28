@@ -22,11 +22,19 @@ class RoleController extends Controller{
   }
 
   public function show(Role $role){
+    if(!$this->request->user()->can('view', $role)) {
+      $this->returnUnauthorized(); 
+    }
+
     $data["data"]["role"] = $role;
     return response()->json($data);
   }
 
   public function create(){
+    if(!$this->request->user()->can('create', Role::class)) {
+      $this->returnUnauthorized(); 
+    }
+
     if($role = Role::create($this->request->only('name','company_id'))){
       $data["data"]["role"] = $role;
       return response()->json($data);
@@ -35,8 +43,12 @@ class RoleController extends Controller{
     } 
   }
 
-  public function destroy($id){
-    if(!Role::destroy($id)){
+  public function destroy(Role $role){
+    if(!$this->request->user()->can('delete', $role)) {
+      $this->returnUnauthorized(); 
+    }
+
+    if(!Role::destroy($role->id)){
       return response()->json(['message' => 'Record not found'], 404);
     } 
     $data["data"]["role"] = null;
@@ -44,6 +56,10 @@ class RoleController extends Controller{
   }
 
   public function update(Role $role){
+    if(!$this->request->user()->can('update', $role)) {
+      $this->returnUnauthorized(); 
+    }
+
     if($role->update($this->request->all())){
       $data["data"]["role"] = $role;
       return response()->json($data);
