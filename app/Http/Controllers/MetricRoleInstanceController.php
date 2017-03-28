@@ -39,11 +39,19 @@ class MetricRoleInstanceController extends Controller{
   }
 
   public function show(MetricRoleInstance $metric_role_instance){
+    if(!$this->request->user()->can('vie', $metric_role_instance)) {
+      $this->returnUnauthorized(); 
+    }
+
     $data["data"]["metric_role_instance"] = $metric_role_instance;
     return response()->json($data);
   }
 
   public function create(){
+    if(!$this->request->user()->can('create', MetricRoleInstance::class)) {
+      $this->returnUnauthorized(); 
+    }
+
     $request = $this->request;
 
     
@@ -109,8 +117,12 @@ class MetricRoleInstanceController extends Controller{
     return response()->json($data);
   } 
 
-  public function destroy($metric_role_instance_id){
-    if(!MetricRoleInstance::destroy($metric_role_instance_id)){
+  public function destroy(MetricRoleInstance $metric_role_instance){
+    if(!$this->request->user()->can('delete', $metric_role_instance)) {
+      $this->returnUnauthorized(); 
+    }
+
+    if(!MetricRoleInstance::destroy($metric_role_instance->id)){
       return response()->json(['message' => 'Record not found'], 404);
     } 
     $data["data"]["metric_role_instance"] = null;
@@ -118,6 +130,10 @@ class MetricRoleInstanceController extends Controller{
   }
 
   public function update(MetricRoleInstance $metric_role_instance){
+    if(!$this->request->user()->can('update', $metric_role_instance)) {
+      $this->returnUnauthorized(); 
+    }
+
     if($metric_role_instance->update($this->request->all())){
       $data["data"]["metric_role_instance"] = $metric_role_instance;
       return response()->json($data);
