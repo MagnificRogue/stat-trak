@@ -20,11 +20,19 @@ class MetricController extends Controller{
   }
 
   public function show(Metric $metric){
+    if(!$this->request->user()->can('view', $metric)) {
+      $this->returnUnauthorized(); 
+    }
+
     $data["data"]["metric"] = $metric;
     return response()->json($data);
   }
 
   public function create(){
+    if(!$this->request->user()->can('create', Metric::class)) {
+      $this->returnUnauthorized(); 
+    }
+
     if($metric = Metric::create($this->request->only('description','company_id'))){
       $data["data"]["metric"] = $metric;
       return response()->json($data);
@@ -33,8 +41,12 @@ class MetricController extends Controller{
     } 
   }
 
-  public function destroy($id){
-    if(!Metric::destroy($id)){
+  public function destroy(Metric $metric){
+    if(!$this->request->user()->can('delete', $metric)) {
+      $this->returnUnauthorized(); 
+    }
+
+    if(!Metric::destroy($metric->id)){
       return response()->json(['message' => 'Record not found'], 404);
     } 
     $data["data"]["metric"] = null;
@@ -42,6 +54,10 @@ class MetricController extends Controller{
   }
 
   public function update(Metric $metric){
+    if(!$this->request->user()->can('update', $metric)) {
+      $this->returnUnauthorized(); 
+    }
+
     if($metric->update($this->request->all())){
       $data["data"]["metric"] = $metric;
       return response()->json($data);
