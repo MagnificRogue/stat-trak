@@ -46,9 +46,6 @@ class MetricRoleInstanceController extends Controller{
   public function create(){
     $request = $this->request;
 
-    
-    $q = MetricRoleInstance::query(); 
-
     if(!$request->user) {
       return response()->json(['message' => 'A user is required to create an instance of the assocation'], 400);
     }
