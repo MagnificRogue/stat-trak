@@ -29,7 +29,7 @@ class UserTest extends TestCase{
 
   public function testGetSpecificUser(){
     //get user 1, also current logged in user
-    $response = $this->callAuthenticated('GET', '/users/1');
+    $response = $this->callAuthenticated('GET', '/users/'.$this->user->id);
     $this->assertTrue($response->isOk());
     $user =  json_decode($response->content(),true)["data"]["user"];
     //make sure the user is who it should be 

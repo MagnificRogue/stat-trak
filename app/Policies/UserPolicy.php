@@ -39,7 +39,7 @@ class UserPolicy extends ModelPolicy
      */
     public function update(User $updater, User $user)
     {
-      return $updater->isAdmin() && $user->compnay_id === $updater->company_id;
+      return $updater->isAdmin() && $user->company_id === $updater->company_id;
     }
 
     /**
@@ -51,6 +51,6 @@ class UserPolicy extends ModelPolicy
      */
     public function delete(User $deleter, User $user)
     {
-      return $updater->isAdmin() && $user->compnay_id === $updater->company_id;    
+      return $updater->isAdmin() && $user->company_id === $updater->company_id;    
     }
 }

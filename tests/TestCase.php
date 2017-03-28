@@ -12,7 +12,7 @@ abstract class TestCase extends BaseTestCase{
 
     protected function setup(){
       parent::setUp();
-      $response =  $this->authenticate(\App\User::first()->email);
+      $response =  $this->authenticate(\App\User::where('permission','super_admin')->first()->email);
       $this->assertTrue($response->isOk());
     }
 

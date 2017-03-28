@@ -22,11 +22,19 @@ class UserController extends Controller{
   }
 
   public function show(User $user){
+    if(!$this->request->user()->can('view', $user)) {
+      $this->returnUnauthorized(); 
+    }
+
     $data["data"]["user"] = $user;
     return response()->json($data);
   }
 
   public function create(){
+    if(!$this->request->user()->can('create', User::class)) {
+      $this->returnUnauthorized(); 
+    }
+
     if($user = User::create($this->request->only('name','email', 'password','company_id','permission'))){
      $data["data"]["user"] = $user;
      return response()->json($data);
@@ -35,8 +43,12 @@ class UserController extends Controller{
     } 
   }
 
-  public function destroy($id){
-    if(!User::destroy($id)){
+  public function destroy(User $user){
+    if(!$this->request->user()->can('delete', $user)) {
+      $this->returnUnauthorized(); 
+    }
+
+    if(!User::destroy($user->id)){
       return response()->json(['message' => 'Record not found'], 404);
     } 
     $data["data"]["user"] = null;
@@ -44,6 +56,10 @@ class UserController extends Controller{
   }
 
   public function update(User $user){
+    if(!$this->request->user()->can('update', $user)) {
+      $this->returnUnauthorized(); 
+    }
+
     if($user->update($this->request->all())){
       $data["data"]["user"] = $user;
       return response()->json($data);
