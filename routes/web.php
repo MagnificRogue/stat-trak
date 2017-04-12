@@ -19,6 +19,8 @@ Route::group(["middleware" =>["jwt.auth"]],function(){
   
   //user routes
   Route::get("/users/create/","UserController@create");
+  Route::get("auth/user","AuthenticateController@user");
+  Route::get("auth/refresh","AuthenticateController@user");
   Route::get("/users","UserController@index");
   Route::get("/users/{user}","UserController@show");
   Route::delete("/users/{user}","UserController@destroy");
