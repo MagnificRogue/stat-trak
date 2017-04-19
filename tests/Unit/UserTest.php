@@ -54,6 +54,19 @@ class UserTest extends TestCase{
     $this->assertCount(sizeOf($users)+1,\App\User::all());
   }
 
+  public function testUpdateUserShouldFailIfPasswordIsNotTheSame(){
+    
+    //get the last user (should be the user created in the test above
+    $user_to_update = \App\User::all()->last();     
+    $this->assertEquals($user_to_update->email,"faker@poop.com");
+    
+    //create a new user 
+    $response = $this->callAuthenticated('PUT', "/users/$user_to_update->id",["email"=>"real@poop.com", "originalPassword"=>"notmypassword"]);
+    $this->assertEquals($response->getStatusCode(), 400);
+    $message =  json_decode($response->content(),true)["message"];
+    $this->assertEquals($message,'Password does not match current user\'s password.');
+  }
+
   public function testUpdateUser(){
     
     //get the last user (should be the user created in the test above
@@ -61,7 +74,7 @@ class UserTest extends TestCase{
     $this->assertEquals($user_to_update->email,"faker@poop.com");
     
     //create a new user 
-    $response = $this->callAuthenticated('PUT', "/users/$user_to_update->id",["email"=>"real@poop.com"]);
+    $response = $this->callAuthenticated('PUT', "/users/$user_to_update->id",["email"=>"real@poop.com", "originalPassword"=>"Harper86"]);
     $this->assertTrue($response->isOk());
     $user =  json_decode($response->content(),true)["data"]["user"];
     $this->assertNotEquals($user["email"],"faker@poop.com");
