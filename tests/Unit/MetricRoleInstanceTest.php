@@ -30,7 +30,6 @@ class MetricRoleInstanceTest extends TestCase{
     $this->assertTrue($response->isOk());
   }
 
-
   public function testReturnUnauthrized(){
     $response = $this->call('GET', '/instances');
     $response->assertStatus(400);
@@ -63,6 +62,7 @@ class MetricRoleInstanceTest extends TestCase{
     $instances = \App\MetricRoleInstance::all();
     //create a new instance
     $response = $this->callAuthenticated("GET",'/instances/create',["count"=>"5",'user' => $this->testUser->id, 'role' => $this->testRole->id, 'metric' => $this->testMetric->id]);
+
     $this->assertTrue($response->isOk());
 
 
@@ -91,14 +91,12 @@ class MetricRoleInstanceTest extends TestCase{
   public function testUpdateMetricRoleInstance(){
     
     //get the last metric (should be the metric created in the test above)
-    $metric_role_instance_to_update = \App\MetricRoleInstance::all()->last();     
-
-    $response = $this->callAuthenticated("PUT","/instances/".$metric_role_instance_to_update->id,["count"=>"69"]);
-    $this->assertTrue($response->isOk());
-
-    $metric_role_instance = json_decode($response->content(),true)["data"]["metric_role_instance"];
-    $this->assertNotEquals($metric_role_instance["count"],$metric_role_instance_to_update->count);
-    $this->assertEquals($metric_role_instance["count"],"69");
+      $metric_role_instance_to_update = \App\MetricRoleInstance::all()->last();     
+      $response = $this->callAuthenticated("PUT","/instances/".$metric_role_instance_to_update->id,["count"=>"69"]);
+      $this->assertTrue($response->isOk());
+      $metric_role_instance = json_decode($response->content(),true)["data"]["metric_role_instance"];
+      $this->assertNotEquals($metric_role_instance["count"],$metric_role_instance_to_update->count);
+      $this->assertEquals($metric_role_instance["count"],"69");
   }
 
   public function testDeleteMetricRoleInstance(){
