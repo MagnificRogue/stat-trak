@@ -35,6 +35,7 @@ class AuthenticateController extends Controller{
   //refresh route for the front end
   public function user(){
     $user = JWTAuth::parseToken()->toUser();
+
     $token = JWTAuth::parseToken()->refresh(); 
     $data = array();
     $data["user"] = $user;
