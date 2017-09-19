@@ -35,14 +35,14 @@ class AuthenticateController extends Controller{
   //refresh route for the front end
   public function user(){
     $user = JWTAuth::parseToken()->toUser();
-    $token = JWTAuth::parseToken()->refresh(); 
+    $token = JWTAuth::getToken(); 
     $data = array();
     $data["user"] = $user;
     return response($data)->withHeaders([
                       'Authorization'=> 'Bearer: '.$token
                    ]);
   }
-  
+
   //signs out user by invalidating their token
   public function invalidate(){
     JWTAuth::parseToken()->invalidate(); 
